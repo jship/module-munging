@@ -13,7 +13,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, macOS-latest]
         resolver:
+        - lts-20 # ghc-9.2.8
         - lts-21 # ghc-9.4.8
+        - lts-22 # ghc-9.6.4
 
     steps:
     - uses: actions/checkout@v3

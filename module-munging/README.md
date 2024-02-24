@@ -15,7 +15,7 @@ require smashing together text to make modules, and it gets tiresome quickly
 dealing again and again with things like imports, exports, etc. Additionally,
 many preprocessors are simple enough that pulling in something like
 `haskell-src-exts` is very much overkill. `module-munging` aims to provide as
-thin of a wrapper over smashing together text as possible while making the act
+thin of a wrapper as possible over smashing together text while making the act
 of doing so a bit more pleasant.
 
 [module-munging]: https://github.com/jship/module-munging
