@@ -32,6 +32,11 @@ library
       Paths_module_munging
   hs-source-dirs:
       library
+  default-extensions:
+      BlockArguments
+      DerivingStrategies
+      ImportQualifiedPost
+      LambdaCase
   ghc-options: -Weverything -Wno-missing-local-signatures -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specializations -Wno-all-missed-specializations -Wno-unsafe -Wno-safe -Wno-missing-safe-haskell-mode
   build-depends:
       base
@@ -45,6 +50,11 @@ test-suite module-munging-test-suite
       Paths_module_munging
   hs-source-dirs:
       test-suite
+  default-extensions:
+      BlockArguments
+      DerivingStrategies
+      ImportQualifiedPost
+      LambdaCase
   ghc-options: -Weverything -Wno-missing-local-signatures -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specializations -Wno-all-missed-specializations -Wno-unsafe -Wno-safe -Wno-missing-safe-haskell-mode -rtsopts -threaded -with-rtsopts "-N"
   build-tool-depends:
       hspec-discover:hspec-discover

@@ -17,6 +17,12 @@ extra-source-files:
 
 language: GHC2021
 
+default-extensions:
+- BlockArguments
+- DerivingStrategies
+- ImportQualifiedPost
+- LambdaCase
+
 ghc-options:
 # Draws heavy inspiration from this list: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
 - -Weverything
@@ -49,3 +55,9 @@ tests:
     - -rtsopts
     - -threaded
     - -with-rtsopts "-N"
+    # Disabling these because of hspec-discover-2.9.7 version in lts-20.26. 
+    # 2.10.3+ has automatic disabling of warnings in the generated driver, and
+    # that version is available in lts-21 and onward.
+    # See https://github.com/hspec/hspec/issues/702 for details.
+    - -Wno-prepositive-qualified-module
+    - -Wno-missing-export-lists
