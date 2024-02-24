@@ -1,5 +1,6 @@
 module ModuleMunging
   ( Module(..)
+  , ModuleName(..)
   , buildModule
   , displayModule
   , ModuleFragment(..)
@@ -17,7 +18,9 @@ import Data.Function ((&))
 import Data.Functor ((<&>))
 import Data.Kind (Type)
 import Data.String (IsString)
+import Text.Printf (printf)
 
+import Data.Char qualified as Char
 import Data.List qualified as List
 import Data.Maybe qualified as Maybe
 
@@ -29,10 +32,28 @@ data Module = Module
   , moduleDeclarations :: [ModuleDeclaration]
   } deriving stock (Eq, Show)
 
-buildModule :: String -> ModuleFragment -> Module
+type ModuleName :: Type
+data ModuleName
+  = ModuleNameExact String
+  | ModuleNameFromFilePath FilePath
+
+moduleNameFromFilePath :: FilePath -> Maybe String
+moduleNameFromFilePath fp = do
+  fp' <- List.reverse <$> List.stripPrefix "sh." (List.reverse fp)
+  n : _ <- pure $ dropWhile (not . Char.isUpper . head) $ List.tails fp'
+  pure $ n & map \case
+    c | Char.isAlphaNum c || c == '_' -> c
+      | otherwise -> '.'
+
+buildModule :: ModuleName -> ModuleFragment -> Module
 buildModule name modFragment =
   Module
-    { moduleName = name
+    { moduleName =
+        case name of
+          ModuleNameExact n -> n
+          ModuleNameFromFilePath fp
+            | Just n <- moduleNameFromFilePath fp -> n
+            | otherwise -> error $ printf "buildModule: Failed to convert filepath \"%s\" to module" fp
     , moduleExports = toExports $ moduleFragmentDeclarations modFragment
     , moduleImports =
         flattenModuleImportGroups

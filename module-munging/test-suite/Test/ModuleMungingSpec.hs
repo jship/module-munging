@@ -28,7 +28,7 @@ spec = parallel do
             module Foo
               ( \n  ) where\n
           |]
-        , testModuleName = "Foo"
+        , testModuleName = ModuleNameExact "Foo"
         , testModuleFragment = mempty
         }
 
@@ -74,7 +74,7 @@ spec = parallel do
               quux :: Int -> Int
               quux = Module.B.quux . A.quux\n
             |]
-        , testModuleName = "Foo.Bar"
+        , testModuleName = ModuleNameExact "Foo.Bar"
         , testModuleFragment = ModuleFragment
             { moduleFragmentImports =
                 [ ModuleImport "Qualified.Module.B" $ ModuleImportStyleQualified $ Just "Module.B"
@@ -139,7 +139,7 @@ spec = parallel do
               quux :: Int -> Int
               quux = Qualified.Module.C.quux . Module.B.quux . A.quux\n
             |]
-        , testModuleName = "Foo.Bar"
+        , testModuleName = ModuleNameExact "Foo.Bar"
         , testModuleFragment = mconcat
             [ ModuleFragment
                 { moduleFragmentImports =
@@ -170,11 +170,77 @@ spec = parallel do
             ]
         }
 
+    it "module name from filepath" do
+      runTest TestCase
+        { expectedModule = Module
+            { moduleName = "Foo"
+            , moduleExports = []
+            , moduleImports = []
+            , moduleDeclarations = []
+            }
+        , expectedDisplay = [__i|
+            -- Auto-generated - do not manually modify!
+            {-\# LANGUAGE ImportQualifiedPost \#-}
+            module Foo
+              ( \n  ) where\n
+          |]
+        , testModuleName = ModuleNameFromFilePath "Foo.hs"
+        , testModuleFragment = mempty
+        }
+      runTest TestCase
+        { expectedModule = Module
+            { moduleName = "Foo.Bar"
+            , moduleExports = []
+            , moduleImports = []
+            , moduleDeclarations = []
+            }
+        , expectedDisplay = [__i|
+            -- Auto-generated - do not manually modify!
+            {-\# LANGUAGE ImportQualifiedPost \#-}
+            module Foo.Bar
+              ( \n  ) where\n
+          |]
+        , testModuleName = ModuleNameFromFilePath "Foo/Bar.hs"
+        , testModuleFragment = mempty
+        }
+      runTest TestCase
+        { expectedModule = Module
+            { moduleName = "Foo.Bar"
+            , moduleExports = []
+            , moduleImports = []
+            , moduleDeclarations = []
+            }
+        , expectedDisplay = [__i|
+            -- Auto-generated - do not manually modify!
+            {-\# LANGUAGE ImportQualifiedPost \#-}
+            module Foo.Bar
+              ( \n  ) where\n
+          |]
+        , testModuleName = ModuleNameFromFilePath "library/Foo/Bar.hs"
+        , testModuleFragment = mempty
+        }
+      runTest TestCase
+        { expectedModule = Module
+            { moduleName = "Foo.Bar"
+            , moduleExports = []
+            , moduleImports = []
+            , moduleDeclarations = []
+            }
+        , expectedDisplay = [__i|
+            -- Auto-generated - do not manually modify!
+            {-\# LANGUAGE ImportQualifiedPost \#-}
+            module Foo.Bar
+              ( \n  ) where\n
+          |]
+        , testModuleName = ModuleNameFromFilePath "library\\Foo\\Bar.hs"
+        , testModuleFragment = mempty
+        }
+
 type TestCase :: Type
 data TestCase = TestCase
   { expectedModule :: Module
   , expectedDisplay :: String
-  , testModuleName :: String
+  , testModuleName :: ModuleName
   , testModuleFragment :: ModuleFragment
   }
 
