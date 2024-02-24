@@ -1,0 +1,8 @@
+.stack-work/
+*.eventlog
+*.eventlog.html
+*.hp
+*.dump-*
+
+bin/
+.DS_Store

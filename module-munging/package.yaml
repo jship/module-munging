@@ -1,0 +1,51 @@
+name: module-munging
+version: '0.0.0.0'
+github: jship/module-munging
+license: MIT
+author: Jason Shipman
+maintainer: Jason Shipman
+synopsis: Smash together text to make modules.
+description: |
+  Thin, low-tech wrapper for smashing together raw text to make Haskell modules.
+category: Codegen
+
+extra-source-files:
+- CHANGELOG.md
+- LICENSE.md
+- package.yaml
+- README.md
+
+language: GHC2021
+
+ghc-options:
+# Draws heavy inspiration from this list: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
+- -Weverything
+- -Wno-missing-local-signatures # Warns if polymorphic local bindings do not have signatures
+- -Wno-missing-exported-signatures # missing-exported-signatures turns off the more strict -Wmissing-signatures. See https://ghc.haskell.org/trac/ghc/ticket/14794#ticket
+- -Wno-missing-import-lists # Requires explicit imports of _every_ function (e.g. ‘$’); too strict
+- -Wno-missed-specializations # When GHC can’t specialize a polymorphic function
+- -Wno-all-missed-specializations # See missed-specializations
+- -Wno-unsafe # Don’t use Safe Haskell warnings
+- -Wno-safe # Don’t use Safe Haskell warnings
+- -Wno-missing-safe-haskell-mode # Don't warn if the Safe Haskell mode is unspecified
+
+library:
+  dependencies:
+  - base
+  source-dirs: library
+
+tests:
+  module-munging-test-suite:
+    source-dirs: test-suite
+    main: Driver.hs
+    build-tools:
+    - hspec-discover
+    dependencies:
+    - base
+    - module-munging
+    - hspec
+    - string-interpolate
+    ghc-options:
+    - -rtsopts
+    - -threaded
+    - -with-rtsopts "-N"
