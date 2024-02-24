@@ -25,6 +25,11 @@ source-repository head
   type: git
   location: https://github.com/jship/module-munging
 
+flag recent-hspec-discover
+  description: Assumes hspec-discover version is 2.10.3+
+  manual: True
+  default: True
+
 library
   exposed-modules:
       ModuleMunging
@@ -64,3 +69,5 @@ test-suite module-munging-test-suite
     , module-munging
     , string-interpolate
   default-language: GHC2021
+  if !flag(recent-hspec-discover)
+    ghc-options: -Wno-prepositive-qualified-module -Wno-missing-export-lists

@@ -27,7 +27,7 @@ data Module = Module
   , moduleExports :: [String]
   , moduleImports :: [ModuleImport]
   , moduleDeclarations :: [ModuleDeclaration]
-  }
+  } deriving stock (Eq, Show)
 
 buildModule :: String -> ModuleFragment -> Module
 buildModule name modFragment =
@@ -82,6 +82,7 @@ displayModule :: Module -> String
 displayModule m =
   unlines
     $ "-- Auto-generated - do not manually modify!"
+    : "{-# LANGUAGE ImportQualifiedPost #-}"
     : "module " <> moduleName
     : "  ( " <> List.intercalate "\n  , " moduleExports
     : "  ) where"
@@ -123,9 +124,11 @@ displayModule m =
   qualifiedImportLines :: [String]
   qualifiedImportLines =
     qualifiedImports
-      & fmap \(n, q) ->  "import " <> n <> " qualified as " <> q
+      & fmap \case
+          (n, Just q) ->  "import " <> n <> " qualified as " <> q
+          (n, Nothing) ->  "import " <> n <> " qualified"
 
-  qualifiedImports :: [(String, String)]
+  qualifiedImports :: [(String, Maybe String)]
   qualifiedImports =
     moduleImports & Maybe.mapMaybe \case
       ModuleImport { moduleImportName = n, moduleImportStyle = s }
@@ -151,7 +154,7 @@ type ModuleFragment :: Type
 data ModuleFragment = ModuleFragment
   { moduleFragmentImports :: [ModuleImport]
   , moduleFragmentDeclarations :: [ModuleDeclaration]
-  }
+  } deriving stock (Eq, Show)
 
 instance Semigroup ModuleFragment where
   (<>) :: ModuleFragment -> ModuleFragment -> ModuleFragment
@@ -171,25 +174,32 @@ instance Monoid ModuleFragment where
 
 type ModuleExport :: Type
 newtype ModuleExport = ModuleExport String
+  deriving stock (Eq, Show)
+  deriving newtype (IsString)
 
 type ModuleImport :: Type
 data ModuleImport = ModuleImport
   { moduleImportName :: String
   , moduleImportStyle :: ModuleImportStyle
-  } deriving stock (Eq, Ord)
+  } deriving stock (Eq, Ord, Show)
 
 type ModuleImportStyle :: Type
 data ModuleImportStyle
   = ModuleImportStyleOpen
   | ModuleImportStyleExplicit [String]
-  | ModuleImportStyleQualified String
-  deriving stock (Eq, Ord)
+  | ModuleImportStyleQualified (Maybe String)
+  deriving stock (Eq, Ord, Show)
 
 type ModuleDeclaration :: Type
 data ModuleDeclaration = ModuleDeclaration Bool DeclName DeclBody
+  deriving stock (Eq, Show)
 
 type DeclName :: Type
-newtype DeclName = DeclName String deriving newtype (IsString)
+newtype DeclName = DeclName String
+  deriving stock (Eq, Show)
+  deriving newtype (IsString)
 
 type DeclBody :: Type
 newtype DeclBody = DeclBody String
+  deriving stock (Eq, Show)
+  deriving newtype (IsString)
