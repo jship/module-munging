@@ -23,4 +23,3 @@ of doing so a bit more pleasant.
 [build]: https://github.com/jship/module-munging/actions
 [Version badge]: https://img.shields.io/hackage/v/module-munging?color=brightgreen&label=version&logo=haskell
 [version]: https://hackage.haskell.org/package/module-munging
-[Haddocks]: https://hackage.haskell.org/package/module-munging

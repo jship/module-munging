@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           module-munging
-version:        0.1.0.0
+version:        0.1.0.1
 synopsis:       Smash together text to make modules.
 description:    Thin, low-tech wrapper for smashing together raw text to make Haskell modules.
 category:       Codegen
@@ -14,6 +14,7 @@ bug-reports:    https://github.com/jship/module-munging/issues
 author:         Jason Shipman
 maintainer:     Jason Shipman
 license:        MIT
+license-file:   LICENSE.md
 build-type:     Simple
 extra-source-files:
     CHANGELOG.md

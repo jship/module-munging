@@ -1,7 +1,8 @@
 name: module-munging
-version: '0.1.0.0'
+version: '0.1.0.1'
 github: jship/module-munging
 license: MIT
+license-file: LICENSE.md
 author: Jason Shipman
 maintainer: Jason Shipman
 synopsis: Smash together text to make modules.
