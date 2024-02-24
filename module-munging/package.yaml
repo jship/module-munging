@@ -1,5 +1,5 @@
 name: module-munging
-version: '0.0.0.0'
+version: '0.1.0.0'
 github: jship/module-munging
 license: MIT
 author: Jason Shipman
@@ -37,7 +37,7 @@ ghc-options:
 
 library:
   dependencies:
-  - base
+  - base >=4.11.0.0 && <5
   source-dirs: library
 
 tests:
