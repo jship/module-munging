@@ -191,7 +191,11 @@ data ModuleImportStyle
   deriving stock (Eq, Ord, Show)
 
 type ModuleDeclaration :: Type
-data ModuleDeclaration = ModuleDeclaration Bool DeclName DeclBody
+data ModuleDeclaration =
+  ModuleDeclaration
+    Bool -- ^ 'True' to export, 'False' to not export
+    DeclName
+    DeclBody
   deriving stock (Eq, Show)
 
 type DeclName :: Type
